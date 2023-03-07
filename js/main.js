@@ -1,142 +1,88 @@
 "use strict"
 
-console.clear();
+// canvasの設定（せってい）
+let canvas = document.getElementById( 'canvas' );
+canvas.width = 640;		//canvasの横幅（よこはば）
+canvas.height = 640;	//canvasの縦幅（たてはば）
+ 
+//コンテキストを取得（しゅとく）
+let ctx = canvas.getContext( '2d' );
+ 
+//りこちゃんのオブジェクトを作成
+let rico = new Object();
+rico.img = new Image();
+rico.img.src = 'img/pic.png';
+rico.x = 0;
+rico.y = 0;
+rico.move = 0;
 
-{
-    // const year = 2023;
-    // const month = 1; // 2月
+//キーボードのオブジェクトを作成
+let key = new Object();
+key.up = false;
+key.down = false;
+key.right = false;
+key.left = false;
+key.push = '';
+ 
+//メインループ
+function main() {
+	//塗（ぬ）りつぶす色を指定（してい）
+	ctx.fillStyle = "rgb( 0, 0, 0 )";
+	//塗（ぬ）りつぶす
+	ctx.fillRect(0, 0, 640, 640);
+	//画像を表示
+	ctx.drawImage( rico.img, rico.x, rico.y );
+	addEventListener("keydown", keydownfunc, false);
+	addEventListener("keyup", keyupfunc, false);
 
-    // let year = 2023;
-    // let month = 1; // 2月
+	//方向キーが押されている場合（ばあい）は、りこちゃんが移動する
+	if ( rico.move === 0 ) {
+		if ( key.left === true ) {
+			rico.move = 32;
+			key.push = 'left';
+		}
+		if ( key.up === true ) {
+			rico.move = 32;
+			key.push = 'up';
+		}
+		if ( key.right === true ) {
+			rico.move = 32;
+			key.push = 'right';
+		}
+		if ( key.down === true ) {
+			rico.move = 32;
+			key.push = 'down';
+		}
+	}
+	//rico.moveが0より大きい場合は、4pxずつ移動（いどう）を続ける
+	if (rico.move > 0) {
+		rico.move -= 4;
+		if ( key.push === 'left' ) rico.x -= 4;
+		if ( key.push === 'up' ) rico.y -= 4;
+		if ( key.push === 'right' ) rico.x += 4;
+		if ( key.push === 'down' ) rico.y += 4;
+	}
+ 
+	requestAnimationFrame( main );
+}
+//ページと依存（いぞん）している全てのデータが読み込まれたら、メインループ開始
+addEventListener('load', main(), false);
 
-    const today = new Date();
-    let year =today.getFullYear();
-    let month = today.getMonth();
-
-    function getCalendarhead(){
-        const dates = [];
-        const d = new Date(year, month, 0).getDate();  //先月末日の日付を取得
-        const n = new Date(year, month, 1).getDay();   //今月初日の曜日を取得（数字）
-
-        for(let i = 0; i < n; i++){
-            //31
-            //30,31
-            //29,30,31
-            dates.unshift({
-                date: d - i,         //日付けの取得 
-            isToday: false,          //本日の日付かどうか
-                isDisabled: true,    //日付が先月か来月かどうか
-            });
-        }
-        // console.log(dates);
-        return dates;                 //戻り値
-    }
-
-    function getCalendarBody(){
-        const dates = [];         // date:日付,day:曜日
-        const lastDate = new Date(year, month + 1, 0).getDate();
-
-        for (let i = 1; i <= lastDate; i++){
-            dates.push({
-                date: i,           //日付けの取得       
-                isToday: false,    //本日の日付かどうか
-                isDisabled: false, //日付が先月か来月かどうか
-            });
-        }
-        if (year === today.getFullYear() && month ===today.getMonth()){
-            dates[today.getDate() - 1].isToday = true;
-        }
-        // console.log(dates);
-        return dates               //戻り値
-    }
-
-    function getCalendarTail(){
-        const dates = [];
-        const lastDay = new Date(year, month + 1, 0).getDay();
-
-        for (let i = 1; i < 7 - lastDay; i++){
-            dates.push({
-                date: i,
-                isToday: false,
-                isDisabled: true,
-            });
-        }
-        // console.log(dates);
-        return dates;             //戻り値
-    }
-
-    function createCarendar(){       //日付を統合する
-
-        const tbody = document.querySelector("tbody");
-
-        while (tbody.firstChild){
-            tbody.removeChild(tbody.firstChild);
-        }
-
-        const title = `${year}/${month +1}`;                  //テンプレートリテラル
-        document.getElementById("title").textContent = title; //バッククォーテーション(`)
-                                                             //で全体を囲む文字列の中に
-        const dates = [                                      //${式}　式を埋め込める。
-            ...getCalendarhead(),
-            ...getCalendarBody(),
-            ...getCalendarTail(),
-        ];
-        const weeks = [];              //週毎の配列にする
-        const weeksCount = dates.length / 7;
-
-        for (let i = 0; i < weeksCount; i++){
-            weeks.push(dates.splice(0,7));
-        }
-        weeks.forEach(week => {
-            const tr = document.createElement("tr");
-            week.forEach(date => {
-                const td = document.createElement("td");
-
-                td.textContent = date.date;
-                if (date.isToday){
-                    td.classList.add("today");
-                }
-                if (date.isDisabled){
-                    td.classList.add("disabled")
-                }
-
-                tr.appendChild(td);
-            
-            });
-            document.querySelector("tbody").appendChild(tr);
-        });
-    }
-
-    document.getElementById("prev").addEventListener("click",() =>{
-        month--;
-        if (month < 0){
-            year--;
-            month = 11;
-        }
-
-        createCarendar();
-
-    })
-
-    document.getElementById("next").addEventListener("click",() =>{
-        month++;
-        if (month > 11){
-            year++;
-            month = 0;
-        }
-
-        createCarendar();
-
-    })
-    document.getElementById("today").addEventListener("click",() =>{
-        year = today.getFullYear();
-        month = today.getMonth();
-
-        createCarendar();
-
-    })
-
-    createCarendar();
-    
+//キーボードが押されたときに呼び出される関数（かんすう）
+function keydownfunc( event ) {
+	let key_code = event.keyCode;
+	if( key_code === 37 ) key.left = true;
+	if( key_code === 38 ) key.up = true;
+	if( key_code === 39 ) key.right = true;
+	if( key_code === 40 ) key.down = true;
+	event.preventDefault();
 }
 
+//キーボードが放（はな）されたときに呼び出される関数
+function keyupfunc( event ) {
+	let key_code = event.keyCode;
+	if( key_code === 37 ) key.left = false;
+	if( key_code === 38 ) key.up = false;
+	if( key_code === 39 ) key.right = false;
+	if( key_code === 40 ) key.down = false;
+}

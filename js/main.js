@@ -25,17 +25,17 @@ function draw(e) {
   [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
 }
 
-// タッチ開始時の処理
 canvas.addEventListener("touchstart", e => {
+  e.preventDefault();
   isDrawing = true;
   [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
 });
 
-// タッチ移動時の処理
-canvas.addEventListener("touchmove", draw);
+canvas.addEventListener("touchmove", e => {
+  e.preventDefault();
+  draw(e);
+});
 
-// タッチ終了時の処理
 canvas.addEventListener("touchend", () => (isDrawing = false));
 
-// タッチキャンセル時の処理
 canvas.addEventListener("touchcancel", () => (isDrawing = false));

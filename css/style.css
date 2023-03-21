@@ -4,5 +4,6 @@ h1{
 canvas{
     border: 1px solid blue;
     border-radius: 10px;
+    touch-action: none;
 
 }

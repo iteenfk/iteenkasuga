@@ -8,7 +8,7 @@ const context = canvas.getContext("2d");
 context.lineWidth = 5;
 context.lineJoin = "round";
 context.lineCap = "round";
-context.strokeStyle = "#000";
+context.strokeStyle = "red";
 
 // 描画状態の初期化
 let isDrawing = false;

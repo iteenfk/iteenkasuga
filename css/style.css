@@ -1,9 +1,30 @@
+
 h1{
-    font-size: 15px;
-}
-canvas{
+    background-color: aliceblue;
+    width: 280px;
+    height: 40px;
+    display: block;
+    margin: 10px auto; 
+    font-size: 20px;
     border: 1px solid blue;
     border-radius: 10px;
-    touch-action: none;
+    text-align: center;
+    padding-top: 10px;
+}
 
+main{
+    text-align: center;
+    background-color: pink;
+    width: 280px;
+    margin: 0 auto;
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+button{
+    background-color: antiquewhite;
+}
+#calendar{
+    margin: 30px auto;
+    width: 62%;
 }

@@ -1,45 +1,38 @@
 "use strict"
 
-function displayCalendar() {
-    // 選択された月を取得する
-    const monthSelect = document.getElementById("monthSelect");
-    // console.log(monthSelect);
-    const monthIndex = monthSelect.selectedIndex;
-    // console.log(monthIndex);
-    const monthValue = monthSelect.options[monthIndex].value;
-    // console.log(monthValue);
-    
-    // 指定された月の最初の日を取得する
-    const date = new Date();
-    // console.log(date);
-    date.setMonth(monthValue);
-    date.setDate(1);
-    // console.log(date.toLocaleDateString());
-    
-    // カレンダーのHTMLを作成する
-    let calendarHTML = "<table>";
-    // console.log(calendarHTML);
-    calendarHTML += "<tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>";
-    // console.log(calendarHTML);
+function getCountryInfo() {
+  const languageCode = document.getElementById("language-select").value;
+  const url = `https://restcountries.com/v2/lang/${languageCode}?fields=name,capital,population,flag,area,currencies,languages,timezones`;
 
-    // カレンダーの各日付についてループ処理する
-    while (date.getMonth() == monthValue) {
-      calendarHTML += "<tr>";
-      for (let i = 0; i < 7; i++) {
-        if (date.getDay() == i) {
-          calendarHTML += "<td>" + date.getDate() + "</td>";
-          date.setDate(date.getDate() + 1);
-        } else {
-          calendarHTML += "<td></td>";
-        }
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 404) {
+        throw new Error('国情報が見つかりませんでした。');
       }
-      calendarHTML += "</tr>";
-    }
-    
-    calendarHTML += "</table>";
-    // console.log(calendarHTML);
-    
-    // カレンダーを表示する
-    document.getElementById("calendar").innerHTML = calendarHTML;
-  }
-  
+      const randomCountryIndex = Math.floor(Math.random() * data.length);
+      const country = data[randomCountryIndex];
+      const name = country.name;
+      const capital = country.capital;
+      const population = country.population;
+      const flag = country.flag;
+      const area = country.area;
+      const currency = country.currencies[0]?.name ?? '';
+      const languageName = country.languages[0]?.name ?? '';
+      const timezones = country.timezones.join(", ");
+      const countryDiv = document.getElementById("country-info");
+      countryDiv.innerHTML = `
+        <br>
+        <h2>${name}</h2>
+        <p>首都: ${capital}</p>
+        <p>人口: ${population}</p>
+        <p>面積: ${area} km²</p>
+        <p>通貨: ${currency}</p>
+        <p>公用語: ${languageName}</p>
+        <p>標準時: ${timezones}</p>
+        <br>
+        <img src="${flag}" alt="${name}の国旗" width="100">
+      `;
+    })
+    .catch(error => console.error(error));
+}

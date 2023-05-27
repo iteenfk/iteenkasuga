@@ -1,39 +1,33 @@
 <!DOCTYPE html>
-  <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>カレンダーアプリ</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>外国情報アプリ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+  <body>
+    <h1>外国情報アプリ</h1>
+    <div class="main">
+      <p>調べたい言語を選択してください:</p>
+      <label for="language-select">言語:</label>
+      <select id="language-select">
+        <option value="en">英語</option>
+        <option value="fr">フランス語</option>
+        <option value="de">ドイツ語</option>
+        <option value="es">スペイン語</option>
+        <option value="ja">日本語</option>
+        <option value="it">イタリア語</option>
+        <option value="ko">韓国語</option>
+        <option value="zh">中国語</option>
+      </select>
+      <br><br>
+      <button onclick="getCountryInfo()">情報を取得する</button>
+      <div id="country-info"></div>
+      <br>
+    </div>
 
-    <body>
-      <header>
-        <h1>iTeen Calendar</h1>
-      </header>
-      <main>
-          <p>表示したい月を選択してください</p>
-          <select id="monthSelect">
-              <option value="0">1月</option>
-              <option value="1">2月</option>
-              <option value="2">3月</option>
-              <option value="3">4月</option>
-              <option value="4">5月</option>
-              <option value="5">6月</option>
-              <option value="6">7月</option>
-              <option value="7">8月</option>
-              <option value="8">9月</option>
-              <option value="9">10月</option>
-              <option value="10">11月</option>
-              <option value="11">12月</option>
-          </select>
-          <button onclick="displayCalendar()">表示</button>
-      
-          <div id="calendar"></div>
-      
-      </main>
-
-      <script src="js/main.js"></script>
-    </body>
+    <script src="js/main.js"></script>
+  </body>
 </html>
